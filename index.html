@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Likert Scale Survey Tally</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            height: 90vh;
+            overflow: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #007BFF;
+            color: white;
+        }
+        
+        tr:hover {
+            background: #f1f1f1;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 15px;
+            text-align: right;
+            padding-right: 10px;
+            line-height: 15px;
+            color: white;
+            font-size: 12px;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        .bar1 {
+            background: #DC3545;
+        }
+        
+        .bar2 {
+            background: #FF8800;
+        }
+        
+        .bar3 {
+            background: #FFD700;
+        }
+        
+        .bar4 {
+            background: #28A745;
+        }
+        
+        .bar5 {
+            background: #007BFF;
+        }
+        
+        input[type="number"] {
+            width: 18%;
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Likert Scale Survey Tally</h2>
+        <label>Enter survey responses:</label><br>
+        <input type="number" id="disagree1" placeholder="Strongly Disagree">
+        <input type="number" id="disagree2" placeholder="Disagree">
+        <input type="number" id="neutral" placeholder="Undecided">
+        <input type="number" id="agree4" placeholder="Agree">
+        <input type="number" id="agree5" placeholder="Strongly Agree">
+        <br>
+        <button onclick="calculateResults()">Calculate</button>
+        <h3>Results</h3>
+        <table>
+            <tr>
+                <th>Response</th>
+                <th>Count</th>
+                <th>Percentage</th>
+                <th>Graph</th>
+            </tr>
+            <tr>
+                <td>Strongly Disagree (1)</td>
+                <td id="count1">0</td>
+                <td id="percent1">0%</td>
+                <td>
+                    <div class="progress-container">
+                        <div id="bar1" class="progress-bar bar1" style="width: 0%;">0%</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Disagree (2)</td>
+                <td id="count2">0</td>
+                <td id="percent2">0%</td>
+                <td>
+                    <div class="progress-container">
+                        <div id="bar2" class="progress-bar bar2" style="width: 0%;">0%</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Undecided (3)</td>
+                       
+       
+            <td>Agree (4)</td>
+            <td id="count4">0</td>
+            <td id="percent4">0%</td>
+            <td>
+                <div class="progress-container">
+                    <div id="bar4" class="progress-bar bar4" style="width: 0%;">0%</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Strongly Agree (5)</td>
+            <td id="count5">0</td>
+            <td id="percent5">0%</td>
+            <td>
+                <div class="progress-container">
+                    <div id="bar5" class="progress-bar bar5" style="width: 0%;">0%</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">Mean Score</th>
+            <th colspan="2" id="meanScore">0</th>
+        </tr>
+    </table>
+</div>
+<script>
+    function calculateResults() {
+        let disagree1 = parseInt(document.getElementById("disagree1").value) || 0;
+        let disagree2 = parseInt(document.getElementById("disagree2").value) || 0;
+        let neutral = parseInt(document.getElementById("neutral").value) || 0;
+        let agree4 = parseInt(document.getElementById("agree4").value) || 0;
+        let agree5 = parseInt(document.getElementById("agree5").value) || 0;
+        let total = disagree1 + disagree2 + neutral + agree4 + agree5;
+        let percentages = [disagree1, disagree2, neutral, agree4, agree5].map(count => total ? ((count / total) * 100).toFixed(2) : 0);
+        let mean = total ? ((disagree1 * 1 + disagree2 * 2 + neutral * 3 + agree4 * 4 + agree5 * 5) / total).toFixed(2) : 0;
+        let ids = ["count1", "count2", "count3", "count4", "count5"];
+        let percentIds = ["percent1", "percent2", "percent3", "percent4", "percent5"];
+        let barIds = ["bar1", "bar2", "bar3", "bar4", "bar5"];
+        [disagree1, disagree2, neutral, agree4, agree5].forEach((count, i) => {
+            document.getElementById(ids[i]).textContent = count;
+            document.getElementById(percentIds[i]).textContent = percentages[i] + "%";
+            document.getElementById(barIds[i]).style.width = percentages[i] + "%";
+            document.getElementById(barIds[i]).textContent = percentages[i] + "%";
+        });
+        document.getElementById("meanScore").textContent = mean;
+    }
+</script>
+```
+</body>
+</html>
